@@ -22,6 +22,15 @@ class Session(e3.Session):
         "facebook": {
             "host": "chat.facebook.com",
             "port": "5222"
+        },
+        "msn-xmpp (experimental)": {
+        # request token url:
+        # https://oauth.live.com/authorize?client_id=000000004C070D1E&redirect_uri=https://oauth.live.com/desktop&response_type=token&scope=wl.messenger wl.offline_access
+        # response:
+        # https://oauth.live.com/desktop#access_token=YOUR_ACCESS_TOKEN&token_type=bearer&expires_in=3600&scope=wl.offline_access%20wl.messenger
+            "client_id": "000000004C070D1E",
+            "host": "messenger.live.com",
+            "port": "5222"
         }
     }
 
