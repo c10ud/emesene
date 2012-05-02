@@ -35,7 +35,7 @@ import uuid
 
 __all__ = ['DirectP2PTransport']
 
-logger = logging.getLogger('msnp2p:transport')
+logger = logging.getLogger('papyon.msnp2p.transport.direct')
 
 
 class DirectP2PTransport(BaseP2PTransport):
