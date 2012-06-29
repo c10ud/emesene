@@ -347,6 +347,22 @@ class Controller(object):
 
         self._save_login_dimensions()
 
+        import objgraph, gc
+        gc.collect()
+        print "gc.collect x2"        
+        gc.collect()
+        def format_callback_name(func):
+            return func.f.__module__, func.f.__name__
+        print "LEAKY LEAKY: UNSUBSCRIBED SIGNALS!!!"
+        if self.session:
+            for signal in dir(self.session.signals):
+                obj = getattr(self.session.signals, signal)
+                if hasattr(obj, '_subscribers'):
+                    if len(obj._subscribers.keys()) > 0:
+                        print "NAME:", obj.name
+                    for o in obj._subscribers.keys():
+                        print "CB >>", format_callback_name(o)
+
         if self.session and self.logged_in:
             self.session.save_config()
             self.session = None
@@ -359,9 +375,13 @@ class Controller(object):
         # install python-objgraph
         # also you can run emesene in pdb: pdb ./emesene.py
         # then 'r' and CTRL+C when you need the shell.
-        #import objgraph
+        #import objgraph, gc
+        #gc.collect()
+        #print "gc.collect x2"        
+        #gc.collect()
         ##objgraph.show_most_common_types()
-        #objgraph.show_growth()
+        objgraph.show_growth()
+        #objgraph.show_chain(objgraph.find_backref_chain(random.choice(objgraph.by_type('Signal')),inspect.ismodule),filename='/tmp/chain.png')
 
         if do_exit:
             extension.get_and_instantiate('quit')

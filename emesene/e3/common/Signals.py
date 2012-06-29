@@ -36,7 +36,7 @@ class Signals(threading.Thread):
 
         for event in events:
             event = event.replace(' ', '_')
-            setattr(self, event, Signal.Signal())
+            setattr(self, event, Signal.Signal(event))
 
     def run(self):
         '''convert Event object on the queue to gui.Signal'''

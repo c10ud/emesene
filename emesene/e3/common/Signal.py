@@ -27,9 +27,10 @@ class Signal(object):
     to the signal, when emited all the callbacks are called until the end or
     until one callback returns False'''
 
-    def __init__(self):
+    def __init__(self, name=""):
         '''constructor'''
         self._subscribers = {}
+        self.name = name
 
     def subscribe(self, callback, *args, **kwargs):
         '''subscribe to the signal, when the signal is emited, callback will be
