@@ -356,6 +356,8 @@ class Controller(object):
         print "LEAKY LEAKY: UNSUBSCRIBED SIGNALS!!!"
         if self.session:
             for signal in dir(self.session.signals):
+                if not hasattr(self.session.signals, signal):
+                    continue
                 obj = getattr(self.session.signals, signal)
                 if hasattr(obj, '_subscribers'):
                     if len(obj._subscribers.keys()) > 0:
