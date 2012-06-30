@@ -28,6 +28,8 @@ import extension
 import StatusButton
 import stock
 
+from WeakMethod import weak_connect
+
 import logging
 log = logging.getLogger('gtkui.Login')
 
@@ -55,12 +57,12 @@ class LoginBaseUI(gtk.Alignment):
         self.cmb_account = gtk.ComboBoxEntry(self.liststore, 0)
         self.cmb_account.set_tooltip_text(_('Account'))
         self.cmb_account.get_children()[0].set_completion(completion)
-        self.cmb_account.get_children()[0].connect('key-press-event',
+        weak_connect(self.cmb_account.get_children()[0], 'key-press-event',
             self._on_account_key_press)
-        self.cmb_account.connect('changed',
+        weak_connect(self.cmb_account, 'changed',
             self._on_account_changed)
-        self.acc_key_rel_handler = self.cmb_account.connect('key-release-event',
-                                                   self._on_account_key_release)
+        weak_connect(self.cmb_account, 'key-release-event', 
+            self._on_account_key_release)
 
         self.btn_status = StatusButton.StatusButton()
         self.btn_status.set_tooltip_text(_('Status'))
@@ -70,9 +72,9 @@ class LoginBaseUI(gtk.Alignment):
         self.txt_password = gtk.Entry()
         self.txt_password.set_tooltip_text(_('Password'))
         self.txt_password.set_visibility(False)
-        self.txt_password.connect('key-press-event',
+        weak_connect(self.txt_password, 'key-press-event',
             self._on_password_key_press)
-        self.txt_password.connect('changed', self._on_password_changed)
+        weak_connect(self.txt_password, 'changed', self._on_password_changed)
         self.txt_password.set_sensitive(False)
 
         pix_account = utils.safe_gtk_pixbuf_load(gui.theme.image_theme.user)
@@ -291,7 +293,7 @@ class Login(LoginBaseUI, gui.LoginBase):
 
         account = self.config.get_or_set('last_logged_account', '')
 
-        self.b_connect.connect('clicked', self._on_connect_clicked)
+        weak_connect(self.b_connect, 'clicked', self._on_connect_clicked)
 
         self._combo_session_list = []
         self.new_combo_session()
@@ -664,9 +666,6 @@ class ConnectingWindow(Login):
 
         #for reconnecting
         self.reconnect_timer_id = None
-        
-        # Disconnect inherited and unneeded event
-        self.cmb_account.disconnect(self.acc_key_rel_handler)
 
         account = config.get_or_set('last_logged_account', '')
         remembers = config.get_or_set('d_remembers', {})
