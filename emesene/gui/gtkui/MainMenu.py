@@ -260,66 +260,66 @@ class OptionsMenu(gtk.Menu):
         gtk.Menu.__init__(self)
 
         if not check_gtk3():
-            self.by_status = gtk.RadioMenuItem(None, _('Order by _status'))
-            self.by_group = gtk.RadioMenuItem(self.by_status, _('Order by _group'))
+            by_status = gtk.RadioMenuItem(None, _('Order by _status'))
+            by_group = gtk.RadioMenuItem(by_status, _('Order by _group'))
         else:
-            self.by_status = gtk.RadioMenuItem(_('Order by _status'))
-            self.by_status.set_use_underline(True)
-            self.by_group = gtk.RadioMenuItem.new_with_mnemonic_from_widget(self.by_status, _('Order by _group'))
-        self.by_group.set_active(config.b_order_by_group)
-        self.by_status.set_active(not config.b_order_by_group)
+            by_status = gtk.RadioMenuItem(_('Order by _status'))
+            by_status.set_use_underline(True)
+            by_group = gtk.RadioMenuItem.new_with_mnemonic_from_widget(by_status, _('Order by _group'))
+        by_group.set_active(config.b_order_by_group)
+        by_status.set_active(not config.b_order_by_group)
 
         show_menu = gtk.MenuItem(_('Show...'))
         show_submenu = gtk.Menu()
 
-        self.show_offline = gtk.CheckMenuItem(_('Show _offline contacts'))
-        self.show_offline.set_active(config.b_show_offline)
-        self.group_offline = gtk.CheckMenuItem(_('G_roup offline contacts'))
-        self.group_offline.set_active(config.b_group_offline)
-        self.show_empty_groups = gtk.CheckMenuItem(_('Show _empty groups'))
-        self.show_empty_groups.set_active(config.b_show_empty_groups)
-        self.show_blocked = gtk.CheckMenuItem(_('Show _blocked contacts'))
-        self.show_blocked.set_active(config.b_show_blocked)
-        self.sort_by_name = gtk.CheckMenuItem(_('Sort contacts by _name'))
-        self.sort_by_name.set_active(config.b_order_by_name)
+        show_offline = gtk.CheckMenuItem(_('Show _offline contacts'))
+        show_offline.set_active(config.b_show_offline)
+        group_offline = gtk.CheckMenuItem(_('G_roup offline contacts'))
+        group_offline.set_active(config.b_group_offline)
+        show_empty_groups = gtk.CheckMenuItem(_('Show _empty groups'))
+        show_empty_groups.set_active(config.b_show_empty_groups)
+        show_blocked = gtk.CheckMenuItem(_('Show _blocked contacts'))
+        show_blocked.set_active(config.b_show_blocked)
+        sort_by_name = gtk.CheckMenuItem(_('Sort contacts by _name'))
+        sort_by_name.set_active(config.b_order_by_name)
 
         preferences = gtk.ImageMenuItem(gtk.STOCK_PREFERENCES)
         preferences.connect('activate',
             lambda *args: handler.on_preferences_selected())
 
-        self.by_status.connect('toggled',
+        by_status.connect('toggled',
             lambda *args: handler.on_order_by_status_toggled(
-                self.by_status.get_active()))
-        self.by_group.connect('toggled',
+                by_status.get_active()))
+        by_group.connect('toggled',
             lambda *args: handler.on_order_by_group_toggled(
-                self.by_group.get_active()))
-        self.show_empty_groups.connect('toggled',
+                by_group.get_active()))
+        show_empty_groups.connect('toggled',
             lambda *args: handler.on_show_empty_groups_toggled(
-                self.show_empty_groups.get_active()))
-        self.show_offline.connect('toggled',
+                show_empty_groups.get_active()))
+        show_offline.connect('toggled',
             lambda *args: handler.on_show_offline_toggled(
-                self.show_offline.get_active()))
-        self.group_offline.connect('toggled',
+                show_offline.get_active()))
+        group_offline.connect('toggled',
             lambda *args: handler.on_group_offline_toggled(
-                self.group_offline.get_active()))
-        self.show_blocked.connect('toggled',
+                group_offline.get_active()))
+        show_blocked.connect('toggled',
             lambda *args: handler.on_show_blocked_toggled(
-                self.show_blocked.get_active()))
-        self.sort_by_name.connect('toggled',
+                show_blocked.get_active()))
+        sort_by_name.connect('toggled',
             lambda *args: handler.on_order_by_name_toggled(
-                self.sort_by_name.get_active()))
+                sort_by_name.get_active()))
 
         show_menu.set_submenu(show_submenu)
-        show_submenu.append(self.show_offline)
-        show_submenu.append(self.show_blocked)
-        show_submenu.append(self.show_empty_groups)
+        show_submenu.append(show_offline)
+        show_submenu.append(show_blocked)
+        show_submenu.append(show_empty_groups)
 
-        self.append(self.by_status)
-        self.append(self.by_group)
+        self.append(by_status)
+        self.append(by_group)
         self.append(gtk.SeparatorMenuItem())
         self.append(show_menu)
-        self.append(self.sort_by_name)
-        self.append(self.group_offline)
+        self.append(sort_by_name)
+        self.append(group_offline)
         self.append(gtk.SeparatorMenuItem())
         self.append(preferences)
 
