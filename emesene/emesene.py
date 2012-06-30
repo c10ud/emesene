@@ -382,7 +382,7 @@ class Controller(object):
         #print "gc.collect x2"        
         #gc.collect()
         ##objgraph.show_most_common_types()
-        objgraph.show_growth()
+        objgraph.show_growth(limit=999)
         #objgraph.show_chain(objgraph.find_backref_chain(random.choice(objgraph.by_type('Signal')),inspect.ismodule),filename='/tmp/chain.png')
 
         if do_exit:
