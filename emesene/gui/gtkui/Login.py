@@ -86,11 +86,11 @@ class LoginBaseUI(gtk.Alignment):
         self.remember_password = gtk.CheckButton(_('Remember password'))
         self.auto_login = gtk.CheckButton(_('Auto-login'))
 
-        self.remember_account.connect('toggled',
+        weak_connect(self.remember_account, 'toggled',
             self._on_remember_account_toggled)
-        self.remember_password.connect('toggled',
+        weak_connect(self.remember_password, 'toggled',
             self._on_remember_password_toggled)
-        self.auto_login.connect('toggled',
+        weak_connect(self.auto_login, 'toggled',
             self._on_auto_login_toggled)
 
         self.remember_account.set_sensitive(False)
@@ -105,7 +105,7 @@ class LoginBaseUI(gtk.Alignment):
         self.forget_me.set_relief(gtk.RELIEF_NONE)
         self.forget_me.set_border_width(0)
         self.forget_me.set_size_request(34, -1)
-        self.forget_me.connect('clicked', self._on_forget_me_clicked)
+        weak_connect(self.forget_me, 'clicked', self._on_forget_me_clicked)
         self.forget_me.set_sensitive(False)
 
         hboxremember = gtk.HBox(spacing=2)
@@ -122,7 +122,7 @@ class LoginBaseUI(gtk.Alignment):
         self.b_connect.set_sensitive(False)
 
         self.b_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
-        self.b_cancel.connect('clicked', self._on_cancel_clicked)
+        weak_connect(self.b_cancel, 'clicked', self._on_cancel_clicked)
 
         vbuttonbox = gtk.VButtonBox()
         vbuttonbox.set_spacing(8)
@@ -166,11 +166,11 @@ class LoginBaseUI(gtk.Alignment):
         self.img_preferences.set_sensitive(False)
         self.b_preferences.set_image(self.img_preferences)
         self.b_preferences.set_relief(gtk.RELIEF_NONE)
-        self.b_preferences.connect('enter-notify-event',
+        weak_connect(self.b_preferences, 'enter-notify-event',
             self._on_preferences_enter)
-        self.b_preferences.connect('leave-notify-event',
+        weak_connect(self.b_preferences, 'leave-notify-event',
             self._on_preferences_leave)
-        self.b_preferences.connect('clicked',
+        weak_connect(self.b_preferences, 'clicked',
             self._on_preferences_selected)
         self.b_preferences.set_size_request(34, -1)
 
@@ -355,7 +355,8 @@ class Login(LoginBaseUI, gui.LoginBase):
         '''populate service combo with avariable services'''
         index = gui.LoginBase.new_combo_session(self, self.service_add_cb)
         self.session_combo.set_active(index)
-        self.session_combo.connect('changed', self._on_session_changed)
+        weak_connect(self.session_combo, 'changed', self._on_session_changed)
+
         self._combo_session_list.append(self.session_combo)
 
     def do_connect(self):
@@ -745,7 +746,7 @@ class ConnectingWindow(Login):
         '''
         self.label_timer.show()
         self.b_connect.show()
-        self.b_connect.connect('clicked', self._on_connect_now_clicked, 
+        weak_connect(self.b_connect, 'clicked', self._on_connect_now_clicked, 
                                callback, account, session_id, proxy, 
                                use_http, use_ipv6, service)
 

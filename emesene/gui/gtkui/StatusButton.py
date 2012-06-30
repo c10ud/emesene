@@ -23,6 +23,8 @@ import gui
 import utils
 import extension
 
+from WeakMethod import weak_connect
+
 class StatusButton(gtk.Button):
     '''a button that when clicked displays a popup that allows the user to
     select a status'''
@@ -52,7 +54,7 @@ class StatusButton(gtk.Button):
         self.set_status(self.status)
 
         self.menu.show_all()
-        self.connect('clicked', self._on_clicked)
+        weak_connect(self, 'clicked', self._on_clicked)
 
     def _on_clicked(self, button):
         '''callback called when the button is clicked'''

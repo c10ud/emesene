@@ -22,12 +22,14 @@ import gui
 import e3
 import extension
 
+from WeakMethod import weak_connect
+
 import sys
 import logging
+
 import SearchEntry
 
 log = logging.getLogger('gtkui.MainWindow')
-
 
 class MainWindow(gtk.VBox, gui.MainWindowBase):
     '''this class represents the widget that is shown when the user is logged
@@ -59,12 +61,12 @@ class MainWindow(gtk.VBox, gui.MainWindowBase):
         self._build_menus()
 
         self.panel = UserPanel(session, self)
-        self.panel.search.connect('toggled', self._on_search_toggled)
+        weak_connect(self.panel.search, 'toggled', self._on_search_toggled)
         self.panel.enabled = False
 
         self.entry = SearchEntry.SearchEntry()
-        self.entry.connect('changed', self._on_entry_changed)
-        self.entry.connect('key-press-event', self._on_entry_key_press)
+        weak_connect(self.entry, 'changed', self._on_entry_changed)
+        weak_connect(self.entry, 'key-press-event', self._on_entry_key_press)
 
         self.pack_start(self.menu, False)
         self.pack_start(self.below_menu, False)

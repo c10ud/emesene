@@ -24,6 +24,7 @@ import gui
 import utils
 import extension
 
+from WeakMethod import weak_connect
 
 class Window(gtk.Window):
     '''the class used to create all the windows of emesene'''
@@ -72,8 +73,8 @@ class Window(gtk.Window):
         self.accel_group = None
 
         self.add(self.box)
-        self.connect('delete-event', self._on_delete_event)
-        self.connect('window-state-event', self._on_window_state_event)
+        weak_connect(self, 'delete-event', self._on_delete_event)
+        weak_connect(self, 'window-state-event', self._on_window_state_event)
 
     def _get_content_main(self):
         '''content getter'''
@@ -146,7 +147,7 @@ class Window(gtk.Window):
         '''change to the main window'''
         MainWindow = extension.get_default('main window')
         self.content_main = MainWindow(session, on_new_conversation)
-        self.connect('key-press-event', self.content_main._on_key_press)
+        weak_connect(self, 'key-press-event', self.content_main._on_key_press)
         self.content_main.show()
         self.content_main.set_accels(self, self.__delete_event_helper)
 
@@ -165,8 +166,8 @@ class Window(gtk.Window):
         '''change to a conversation window'''
         ConversationManager = extension.get_default('conversation window')
         self.content_conv = ConversationManager(session, self._on_last_tab_close)
-        self.connect('focus-in-event', self.content_conv._on_focus)
-        self.connect('key-press-event', self.content_conv._on_key_press)
+        weak_connect(self, 'focus-in-event', self.content_conv._on_focus)
+        weak_connect(self, 'key-press-event', self.content_conv._on_key_press)
         self.content_conv.show()
         self.content_conv.set_accels()
 
