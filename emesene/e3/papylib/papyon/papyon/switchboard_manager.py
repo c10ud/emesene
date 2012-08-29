@@ -412,16 +412,14 @@ class SwitchboardManager(gobject.GObject):
             # Requested switchboards
             if switchboard in self._pending_switchboards:
                 handlers = self._pending_switchboards[switchboard]
-                while True:
-                    try:
-                        handler = handlers.pop()
-                        handler_participants = handler.total_participants
-                        switchboard_participants = set(switchboard.participants.values())
-                        if handler_participants == switchboard_participants:
-                            self._switchboards[switchboard].add(handler)
-                            handler._switchboard = switchboard
-                    except KeyError:
-                        break
+                try:
+                    handler = handlers.pop()
+                    handler_participants = handler.total_participants
+                    switchboard_participants = set(switchboard.participants.values())
+                    self._switchboards[switchboard].add(handler)
+                    handler._switchboard = switchboard
+                except KeyError:
+                    pass
                 del self._pending_switchboards[switchboard]
 
             # Orphaned Handlers
