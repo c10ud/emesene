@@ -390,14 +390,23 @@ class Controller(object):
 
         self.config.save(self.config_path)
 
+        import gc
+        gc.set_debug(gc.DEBUG_LEAK)
+        # Show the effect of garbage collection
+        print 'Collecting...'
+        n = gc.collect()
+        print 'Unreachable objects:', n
+        print 'Remaining Garbage:', 
+        print gc.garbage
+
         #http://www.lshift.net/blog/2008/11/14/tracing-python-memory-leaks
         #http://mg.pov.lt/objgraph/
         # install python-objgraph
         # also you can run emesene in pdb: pdb ./emesene.py
         # then 'r' and CTRL+C when you need the shell.
-        #import objgraph
+        import objgraph
         ##objgraph.show_most_common_types()
-        #objgraph.show_growth(limit=None)
+        objgraph.show_growth(limit=None)
 
         if do_exit:
             extension.get_and_instantiate('quit')
