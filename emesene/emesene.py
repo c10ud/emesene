@@ -397,7 +397,8 @@ class Controller(object):
         n = gc.collect()
         print 'Unreachable objects:', n
         print 'Remaining Garbage:', 
-        print gc.garbage
+        for item in gc.garbage:
+            print "%s: %s" % (type(item), item)
 
         #http://www.lshift.net/blog/2008/11/14/tracing-python-memory-leaks
         #http://mg.pov.lt/objgraph/
