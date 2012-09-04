@@ -379,6 +379,7 @@ class Controller(object):
             self.session.quit()
             self._save_application_language()
             self.session.save_extensions_config()
+            del self.session.caches
 
         self._save_login_dimensions()
 
@@ -391,14 +392,14 @@ class Controller(object):
         self.config.save(self.config_path)
 
         import gc
-        gc.set_debug(gc.DEBUG_LEAK)
+        #gc.set_debug(gc.DEBUG_LEAK)
         # Show the effect of garbage collection
         print 'Collecting...'
         n = gc.collect()
         print 'Unreachable objects:', n
-        print 'Remaining Garbage:', 
-        for item in gc.garbage:
-            print "%s: %s" % (type(item), item)
+        print 'Remaining Garbage:' 
+        #for item in gc.garbage:
+        #    print "%s: %s" % (type(item), item)
 
         #http://www.lshift.net/blog/2008/11/14/tracing-python-memory-leaks
         #http://mg.pov.lt/objgraph/
