@@ -29,6 +29,7 @@ import p2p
 from switchboard_manager import SwitchboardHandler
 from papyon.event import EventsDispatcher
 from papyon.profile import NetworkID
+from papyon.util.decorator import async
 
 import logging
 import gobject
@@ -430,8 +431,9 @@ class ExternalNetworkConversation(AbstractConversation):
         self.participants = set(contacts)
         self.total_participants = self.participants
         client._register_external_conversation(self)
-        gobject.idle_add(self._open)
+        self._open()
 
+    @async
     def _open(self):
         for contact in self.participants:
             self._on_contact_joined(contact)

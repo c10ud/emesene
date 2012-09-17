@@ -34,6 +34,8 @@ G{classtree BaseTransport}"""
 from gnet.proxy.factory import ProxyFactory
 from papyon.util.async import run
 
+from papyon.util.timer import Timer
+
 import gnet
 import gnet.protocol
 import msnp
@@ -345,7 +347,7 @@ class DirectConnection(BaseTransport):
 gobject.type_register(DirectConnection)
 
 
-class HTTPPollConnection(BaseTransport):
+class HTTPPollConnection(BaseTransport, Timer):
     """Implements an HTTP polling transport, basically it encapsulates the MSNP
     commands into an HTTP request, and receive responses by polling a specific
     url"""
@@ -356,11 +358,11 @@ class HTTPPollConnection(BaseTransport):
         else:
             server = ("gateway.messenger.hotmail.com", 80)
         BaseTransport.__init__(self, server, server_type, proxies)
+        Timer.__init__(self)
         self._setup_transport(server[0], server[1], proxies)
         
         self._command_queue = []
         self._waiting_for_response = False # are we waiting for a response
-        self._polling_source_id = None
         self._session_id = None
         self.__error = None
 
@@ -375,13 +377,11 @@ class HTTPPollConnection(BaseTransport):
 
     def establish_connection(self):
         logger.debug('<-> Connecting to %s:%d' % self.server)
-        self._polling_source_id = gobject.timeout_add_seconds(5, self._poll)
+        self.start_timeout("poll", 5)
         self.emit("connection-success")
 
     def lose_connection(self, error=None):
-        if self._polling_source_id:
-            gobject.source_remove(self._polling_source_id)
-            self._polling_source_id = None
+        self.stop_all_timeout()
         if error is not None:
             self.emit("connection-failure", error)
         elif not self.__error:
@@ -442,7 +442,7 @@ class HTTPPollConnection(BaseTransport):
         if increment:
             self._increment_transaction_id()
         
-    def _poll(self):
+    def on_poll_timeout(self):
         if not self._waiting_for_response:
             self.send_command(None)
         return True

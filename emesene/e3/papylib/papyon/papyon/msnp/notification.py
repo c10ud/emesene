@@ -410,7 +410,7 @@ class NotificationProtocol(BaseProtocol, Timer):
         timeout = int(command.arguments[0])
         self.start_timeout("ping", timeout)
         self._time_id = time.time()
-        self.start_timeout(("qing", self._time_id), timeout+5)
+        self.start_timeout_with_id("qing", self._time_id, timeout+5)
 
     def _handle_OUT(self, command):
         reason = None

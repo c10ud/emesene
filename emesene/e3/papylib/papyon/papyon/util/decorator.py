@@ -18,6 +18,7 @@
 #
 
 """Useful decorators"""
+from papyon.util.timer import Timer
 
 import sys
 import warnings
@@ -86,17 +87,18 @@ def async(func):
         gobject.idle_add(async_function)
     return new_function
 
-class throttled(object):
+class throttled(Timer):
     """Throttle the calls to a function by queueing all the calls that happen
     before the minimum delay."""
 
     def __init__(self, min_delay, queue):
+        Timer.__init__(self)
         self._min_delay = min_delay
         self._queue = queue
         self._last_call_time = None
 
     def __call__(self, func):
-        def process_queue():
+        def on_process_queue_timeout():
             if len(self._queue) != 0:
                 func, args, kwargs = self._queue.pop(0)
                 self._last_call_time = time.time()
@@ -113,7 +115,7 @@ class throttled(object):
                 self._queue.append((func, args, kwargs))
                 last_call_delta = now - self._last_call_time
                 process_queue_timeout = int(self._min_delay * len(self._queue) - last_call_delta)
-                gobject.timeout_add_seconds(process_queue_timeout, process_queue)
+                self.start_timeout("process_queue", process_queue_timeout)
 
         new_function.__name__ = func.__name__
         new_function.__doc__ = func.__doc__

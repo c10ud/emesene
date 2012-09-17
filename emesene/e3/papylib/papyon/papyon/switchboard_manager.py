@@ -31,6 +31,7 @@ import papyon.msnp as msnp
 from papyon.profile import Presence
 from papyon.transport import ServerType
 from papyon.util.async import run
+from papyon.util.decorator import async
 try:
     from weakref import WeakSet
 except ImportError:
@@ -97,10 +98,11 @@ class SwitchboardHandler(object):
 
         logger.info("Handler %s attached to switchboard %s" %
                 (repr(self), switchboard.session_id))
+        @async
         def process_pending_queues():
             self._process_pending_queues()
             return False
-        gobject.idle_add(process_pending_queues)
+        process_pending_queues()
 
     _switchboard = property(__get_switchboard, __set_switchboard)
     switchboard = property(__get_switchboard)

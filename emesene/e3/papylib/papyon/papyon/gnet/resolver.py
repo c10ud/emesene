@@ -21,8 +21,6 @@
 
 import socket
 
-import gobject
-
 from papyon.gnet.errors import IoError
 from papyon.util.async import run
 from papyon.util.decorator import async
@@ -78,6 +76,7 @@ class HostnameResolver(object):
 
 
 if __name__ == "__main__":
+    import gobject
     mainloop = gobject.MainLoop(is_running=True)
     def print_throbber():
         print "*"

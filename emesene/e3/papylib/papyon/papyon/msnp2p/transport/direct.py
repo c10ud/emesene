@@ -25,6 +25,7 @@ from papyon.msnp2p.transport.TLPv1 import MessageChunk as NonceChunk
 from papyon.msnp2p.transport.TLP import MessageChunk
 from papyon.msnp2p.transport.base import BaseP2PTransport
 import papyon.util.debug as debug
+from papyon.util.timer import Timer
 
 import gobject
 import random
@@ -38,7 +39,7 @@ __all__ = ['DirectP2PTransport']
 logger = logging.getLogger('papyon.msnp2p.transport.direct')
 
 
-class DirectP2PTransport(BaseP2PTransport):
+class DirectP2PTransport(BaseP2PTransport, Timer):
 
     __gsignals__ = {
             "listening": (gobject.SIGNAL_RUN_FIRST,
@@ -49,6 +50,7 @@ class DirectP2PTransport(BaseP2PTransport):
     def __init__(self, client, peer, peer_guid, transport_manager, ip=None,
             port=None, nonce=None):
         BaseP2PTransport.__init__(self, transport_manager, "direct")
+        Timer.__init__(self)
 
         if ip is None:
             ip = client.local_ip
@@ -67,8 +69,6 @@ class DirectP2PTransport(BaseP2PTransport):
         self._listening = False
         self._connected = False
         self._extern_port = None
-        self._mapping_timeout_src = None
-        self._connect_timeout_src = None
 
         self.__pending_size = None
         self.__pending_chunk = ""
@@ -138,7 +138,7 @@ class DirectP2PTransport(BaseP2PTransport):
         self._transport.connect("error", self._on_error)
         self._transport.connect("received", self._on_data_received)
         logger.info("Try to connect to %s:%i" % (self._ip, self._port))
-        self._connect_timeout_src = gobject.timeout_add_seconds(5, self._on_connect_timeout)
+        self.start_timeout("connect", 5)
         self._transport.open()
 
     def listen(self):
@@ -153,8 +153,7 @@ class DirectP2PTransport(BaseP2PTransport):
     def close(self):
         if hasattr(self, '_transport'):
             self._transport.close()
-        self._remove_connect_timeout()
-        self._remove_mapping_timeout()
+        self.stop_all_timeout()
         self._unmap_external_port()
         BaseP2PTransport.close(self)
 
@@ -182,8 +181,7 @@ class DirectP2PTransport(BaseP2PTransport):
             self._set_listening(None, None)
             return
 
-        self._mapping_timeout_src = gobject.timeout_add_seconds(timeout,
-                self._on_mapping_timeout)
+        self.start_timeout("mapping", timeout)
 
         self.simple = Simple()
         self.simple.connect("error-mapping-port", self._on_error_mapping_port)
@@ -197,11 +195,6 @@ class DirectP2PTransport(BaseP2PTransport):
         self.simple.remove_port("TCP", self._extern_port)
         self._extern_port = None
 
-    def _remove_mapping_timeout(self):
-        if self._mapping_timeout_src is not None:
-            gobject.source_remove(self._mapping_timeout_src)
-            self._mapping_timeout_src = None
-
     def _on_error_mapping_port(self, simple, error, proto, extern_port,
         local_ip, local_port, description):
         logger.warning("Error mapping port %u (%s)" % (local_port, error))
@@ -213,9 +206,8 @@ class DirectP2PTransport(BaseP2PTransport):
         self._extern_port = extern_port
         self._set_listening(extern_ip, extern_port)
 
-    def _on_mapping_timeout(self):
+    def on_mapping_timeout(self):
         logger.warning("Error mapping port %u (timeout)" % self._port)
-        self._mapping_timeout_src = None
         self._set_listening(None, None)
         return False
 
@@ -224,7 +216,7 @@ class DirectP2PTransport(BaseP2PTransport):
             ip = self._client.client_ip
         if not port:
             port = self._port
-        self._remove_mapping_timeout()
+        self.stop_timeout("mapping")
         if not self._listening:
             self._listening = True
             self.emit("listening", ip, port)
@@ -242,9 +234,7 @@ class DirectP2PTransport(BaseP2PTransport):
         self._transport.send(body, callback)
 
     def _remove_connect_timeout(self):
-        if self._connect_timeout_src is not None:
-            gobject.source_remove(self._connect_timeout_src)
-            self._connect_timeout_src = None
+        self.stop_timeout("connect")
 
     def _on_status_changed(self, transport, param):
         status = transport.get_property("status")
@@ -262,7 +252,7 @@ class DirectP2PTransport(BaseP2PTransport):
             self._listening = False
             self._connected = False
 
-    def _on_connect_timeout(self):
+    def on_connect_timeout(self):
         logger.info("Socket connection timeout")
         self._on_failed()
         return False

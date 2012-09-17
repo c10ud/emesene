@@ -28,6 +28,7 @@ from constants import ProtocolError, ProtocolState
 from message import Message
 import papyon.profile
 
+from papyon.util.timer import Timer
 from papyon.util.async import run
 from papyon.util.parsing import build_account, parse_account
 
@@ -40,7 +41,7 @@ __all__ = ['SwitchboardProtocol']
 logger = logging.getLogger('papyon.protocol.switchboard')
 
 
-class SwitchboardProtocol(BaseProtocol):
+class SwitchboardProtocol(BaseProtocol, Timer):
     """Protocol used to communicate with the Switchboard Server
 
         @undocumented: do_get_property, do_set_property
@@ -104,10 +105,10 @@ class SwitchboardProtocol(BaseProtocol):
             @type proxies: {type: string, proxy:L{gnet.proxy.ProxyInfos}}
         """
         BaseProtocol.__init__(self, client, transport, proxies)
+        Timer.__init__(self)
+
         self.participants = {}
         self.end_points = {}
-        self.inactivity_timer_id = 0
-        self.keepalive_timer_id = 0
         self.__session_id = session_id
         self.__key = key
         self.__state = ProtocolState.CLOSED
@@ -118,7 +119,7 @@ class SwitchboardProtocol(BaseProtocol):
         logger.info("New switchboard session %s" % session_id)
         client.profile.connect("end-point-added", self._on_end_point_added)
         if client.keepalive_conversations:
-            self.keepalive_timer_id = gobject.timeout_add_seconds(8, self._keepalive_conversation)
+            self.start_timeout("keepalive", 8)
 
     # Properties ------------------------------------------------------------
     @property
@@ -182,12 +183,7 @@ class SwitchboardProtocol(BaseProtocol):
         """Leave the conversation"""
         if self.state != ProtocolState.OPEN:
             return
-        if self.inactivity_timer_id:
-            gobject.source_remove(self.inactivity_timer_id)
-            self.inactivity_timer_id = 0
-        if self.keepalive_timer_id:
-            gobject.source_remove(self.keepalive_timer_id)
-            self.keepalive_timer_id = 0
+        self.stop_all_timeout()
         if inactivity:
             logger.info("Switchboard timed out. Going to leave it.")
         logger.info("Leaving switchboard %s" % self.__session_id)
@@ -314,11 +310,9 @@ class SwitchboardProtocol(BaseProtocol):
             logger.error('Notification got error :' + unicode(error))
 
     def _update_switchboard_timeout(self):
-        if self.inactivity_timer_id:
-            gobject.source_remove(self.inactivity_timer_id)
-            self.inactivity_timer_id = 0
-        if len(self.participants) == 1 and not self.keepalive_timer_id:
-            self.inactivity_timer_id = gobject.timeout_add_seconds(300, self.leave, True)
+        self.stop_timeout("inactivity")
+        if len(self.participants) == 1 and "keepalive" not in self.timeouts:
+            self.start_timeout("inactivity", 300)
 
     # callbacks --------------------------------------------------------------
     def _connect_cb(self, transport):
@@ -349,11 +343,14 @@ class SwitchboardProtocol(BaseProtocol):
         logger.info("New end point connected, re-invite local user")
         self.invite_user(profile)
 
-    def _keepalive_conversation(self):
+    def on_keepalive_timeout(self, *args):
         if self.state != ProtocolState.OPEN:
             return True
         message = Message()
         message.add_header('Content-Type', 'text/x-keep-alive')
         self._send_command('MSG', 'N', message, True)
         return True
+
+    def on_inactivity_timeout(self, *args):
+        self.leave(True)
 

@@ -27,7 +27,7 @@ __all__ = ['SIPRegistration']
 
 logger = logging.getLogger('papyon.sip.registration')
 
-class SIPRegistration(gobject.GObject):
+class SIPRegistration(gobject.GObject, Timer):
 
     __gsignals__ = {
         'registered': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ([])),
@@ -37,11 +37,11 @@ class SIPRegistration(gobject.GObject):
 
     def __init__(self, client, core):
         gobject.GObject.__init__(self)
+        Timer.__init__(self)
         self._client = client
         self._core = core
         self._state = "NEW"
         self._sso = client._sso
-        self._src = None
         self._request = None
         self._pending_unregister = False
         self._tokens = {}
@@ -73,9 +73,7 @@ class SIPRegistration(gobject.GObject):
 
         self._state = "UNREGISTERING"
         self._pending_unregister = False
-        if self._src is not None:
-            gobject.source_remove(self._src)
-        self._src = None
+        self.stop_all_timeout()
         self._do_unregister(None, None)
 
     def _send_register(self, timeout, auth):
@@ -100,7 +98,7 @@ class SIPRegistration(gobject.GObject):
         auth = base64.encodestring(auth).replace("\n", "")
         self._send_register(0, auth)
 
-    def _on_expire(self):
+    def on_expire_timeout(self):
         self.register()
         return False
 
@@ -114,9 +112,10 @@ class SIPRegistration(gobject.GObject):
             self._state = "REGISTERED"
             self.emit("registered")
             timeout = int(response.get_header("Expires", 30))
-            self._src = gobject.timeout_add_seconds(timeout, self._on_expire)
+            self.start_timeout("expire", timeout)
             if self._pending_unregister:
                 self.unregister()
         else:
             self._state = "UNREGISTERED"
             self.emit("failed")
+

@@ -20,6 +20,8 @@
 
 from papyon.msnp2p.transport.TLP import MessageBlob
 
+from papyon.util.timer import Timer
+
 import gobject
 import logging
 import random
@@ -33,7 +35,7 @@ logger = logging.getLogger('papyon.msnp2p.transport')
 
 MAX_INT32 = 2147483647
 
-class BaseP2PTransport(gobject.GObject):
+class BaseP2PTransport(gobject.GObject, Timer):
     __gsignals__ = {
             "connected": (gobject.SIGNAL_RUN_FIRST,
                 gobject.TYPE_NONE,
@@ -60,6 +62,8 @@ class BaseP2PTransport(gobject.GObject):
 
     def __init__(self, transport_manager, name):
         gobject.GObject.__init__(self)
+        Timer.__init__(self)
+
         self._transport_manager = weakref.proxy(transport_manager)
         self._client = transport_manager._client
         self._name = name
@@ -184,16 +188,13 @@ class BaseP2PTransport(gobject.GObject):
         self._start_processing()
 
     def _start_processing(self):
-        if self._source is None:
-            self._source = gobject.timeout_add(200, self._process_send_queue)
-        self._process_send_queue()
+        self.start_timeout("process_send_queue", 0.2)
+        self.on_process_send_queue_timeout()
 
     def _stop_processing(self):
-        if self._source is not None:
-            gobject.source_remove(self._source)
-            self._source = None
+        self.stop_all_timeout()
 
-    def _process_send_queue(self):
+    def on_process_send_queue_timeout(self):
         if not self._queue_lock.acquire(False):
             return True
         if not self.has_data_to_send():
