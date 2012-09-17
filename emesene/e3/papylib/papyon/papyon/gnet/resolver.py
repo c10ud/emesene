@@ -23,7 +23,6 @@ import socket
 
 from papyon.gnet.errors import IoError
 from papyon.util.async import run
-from papyon.util.decorator import async
 
 __all__ = ['HostnameResolver']
 
@@ -58,7 +57,6 @@ class HostnameResolver(object):
     def __init__(self):
         self._queries = {}
 
-    @async
     def query(self, host, callback, errback):
         try:
             result = socket.getaddrinfo(host, None, socket.AF_INET, socket.SOCK_STREAM)

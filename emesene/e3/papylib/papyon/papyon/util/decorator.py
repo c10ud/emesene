@@ -24,8 +24,6 @@ import sys
 import warnings
 import time
 
-import gobject
-
 
 def decorator(function):
     """decorator to be used on decorators, it preserves the docstring and
@@ -56,36 +54,6 @@ def rw_property(function):
     """
     return property(**function())
 
-@decorator
-def deprecated(func):
-    """This is a decorator which can be used to mark functions as deprecated.
-    It will result in a warning being emitted when the function is used."""
-    def new_function(*args, **kwargs):
-        warnings.warn("Call to deprecated function %s." % func.__name__,
-                      category=DeprecationWarning)
-        return func(*args, **kwargs)
-    return new_function
-
-@decorator
-def unstable(func):
-    """This is a decorator which can be used to mark functions as unstable API
-    wise. It will result in a warning being emitted when the function is used."""
-    def new_function(*args, **kwargs):
-        warnings.warn("Call to unstable API function %s." % func.__name__,
-                      category=FutureWarning)
-        return func(*args, **kwargs)
-    return new_function
-
-@decorator
-def async(func):
-    """Make a function mainloop friendly. the function will be called at the
-    next mainloop idle state."""
-    def new_function(*args, **kwargs):
-        def async_function():
-            func(*args, **kwargs)
-            return False
-        gobject.idle_add(async_function)
-    return new_function
 
 class throttled(Timer):
     """Throttle the calls to a function by queueing all the calls that happen
