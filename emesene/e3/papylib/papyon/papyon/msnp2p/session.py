@@ -28,7 +28,7 @@ from papyon.util.parsing import build_account
 from papyon.util.timer import Timer
 import papyon.util.element_tree as ElementTree
 
-import gobject
+from papyon.util import signals as gobject
 import base64
 import logging
 import random

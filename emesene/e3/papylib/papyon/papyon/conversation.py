@@ -31,7 +31,6 @@ from papyon.event import EventsDispatcher
 from papyon.profile import NetworkID
 
 import logging
-import gobject
 from urllib import quote, unquote
 
 __all__ = ['Conversation', 'ConversationInterface', 'ConversationMessage', 'TextFormat']

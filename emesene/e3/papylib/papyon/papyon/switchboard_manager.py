@@ -24,13 +24,13 @@ The switchboard manager is responsible for managing all the switchboards in
 use, it simplifies the complexity of the switchboard crack."""
 
 import logging
-import gobject
 import weakref
 
 import papyon.msnp as msnp
 from papyon.profile import Presence
 from papyon.transport import ServerType
 from papyon.util.async import run
+from papyon.util import signals as gobject
 
 try:
     from weakref import WeakSet

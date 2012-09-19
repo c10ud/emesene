@@ -33,7 +33,7 @@ G{classtree BaseTransport}"""
 
 from gnet.proxy.factory import ProxyFactory
 from papyon.util.async import run
-
+from papyon.util import signals as gobject
 from papyon.util.timer import Timer
 
 import gnet
@@ -41,7 +41,6 @@ import gnet.protocol
 import msnp
 
 import logging
-import gobject
 
 __all__=['ServerType', 'DirectConnection']
 

@@ -50,7 +50,7 @@ import time
 import logging
 import uuid
 import urllib
-import gobject
+from papyon.util import signals as gobject
 import xml.sax.saxutils as xml_utils
 
 __all__ = ['NotificationProtocol']

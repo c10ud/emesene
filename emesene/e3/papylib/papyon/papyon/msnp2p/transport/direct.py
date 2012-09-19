@@ -27,7 +27,7 @@ from papyon.msnp2p.transport.base import BaseP2PTransport
 import papyon.util.debug as debug
 from papyon.util.timer import Timer
 
-import gobject
+from papyon.util import signals as gobject
 import random
 import struct
 import logging

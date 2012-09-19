@@ -22,7 +22,7 @@ from papyon.msnp2p.constants import ApplicationID, EufGuid
 from papyon.msnp2p.errors import FTParseError
 from papyon.msnp2p.session import P2PSession
 
-import gobject
+from papyon.util import signals as gobject
 import struct
 
 __all__ = ['FileTransferSession']

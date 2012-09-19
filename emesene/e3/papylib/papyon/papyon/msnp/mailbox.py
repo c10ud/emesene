@@ -19,7 +19,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-import gobject
+from papyon.util import signals as gobject
 
 __all__ = ['Mailbox', 'MailMessage']
 

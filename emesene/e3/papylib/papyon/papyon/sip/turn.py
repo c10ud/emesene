@@ -30,7 +30,7 @@ from papyon.util.timer import Timer
 
 import base64
 import getpass
-import gobject
+from papyon.util import signals as gobject
 import hashlib
 import hmac
 import logging

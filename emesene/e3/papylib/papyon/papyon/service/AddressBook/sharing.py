@@ -247,7 +247,7 @@ if __name__ == '__main__':
     import sys
     import getpass
     import signal
-    import gobject
+    from papyon.util import signals as gobject
     import logging
     from papyon.service.SingleSignOn import *
 

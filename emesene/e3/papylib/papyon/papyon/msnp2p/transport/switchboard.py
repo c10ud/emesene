@@ -24,7 +24,7 @@ from papyon.msnp2p.transport.base import BaseP2PTransport
 from papyon.switchboard_manager import SwitchboardHandler
 from papyon.util.parsing import build_account, parse_account
 
-import gobject
+from papyon.util import signals as gobject
 import struct
 import logging
 

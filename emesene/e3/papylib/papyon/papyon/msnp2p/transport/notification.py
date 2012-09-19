@@ -22,7 +22,7 @@ from papyon.msnp.constants import UserNotificationTypes
 from papyon.msnp2p.transport.TLP import MessageBlob
 from papyon.msnp2p.transport.base import BaseP2PTransport
 
-import gobject
+from papyon.util import signals as gobject
 import struct
 import logging
 

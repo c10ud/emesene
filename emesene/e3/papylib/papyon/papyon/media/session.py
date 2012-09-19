@@ -21,7 +21,7 @@
 from papyon.event import EventsDispatcher
 from papyon.media.stream import *
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 
 logger = logging.getLogger('papyon.media.session')

@@ -24,7 +24,7 @@ from papyon.msnp.constants import *
 from papyon.sip.message import SIPResponse, SIPRequest, SIPMessageParser, SIPVia
 
 import base64
-import gobject
+from papyon.util import signals as gobject
 import logging
 import uuid
 import xml.dom.minidom

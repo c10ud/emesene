@@ -23,7 +23,7 @@ from papyon.sip.message import SIPResponse, SIPRequest, SIPCSeq
 from papyon.util.decorator import rw_property
 from papyon.util.timer import Timer
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 
 logger = logging.getLogger('papyon.sip.transaction')

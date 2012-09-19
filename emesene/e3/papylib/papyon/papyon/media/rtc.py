@@ -20,7 +20,7 @@
 
 from papyon.msnp.constants import *
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 
 logger = logging.getLogger('papyon.media.rtc')

@@ -34,7 +34,7 @@ from papyon.util.parsing import build_account, parse_account
 
 import logging
 import urllib
-import gobject
+from papyon.util import signals as gobject
 
 __all__ = ['SwitchboardProtocol']
 

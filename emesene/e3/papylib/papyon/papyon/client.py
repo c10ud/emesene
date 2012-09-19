@@ -35,7 +35,7 @@ network. The following example demonstrates a simple client.
     >>> client.login(*account)
     >>>
     >>> if __name__ == "__main__":
-    ...     import gobject
+    ...     from papyon.util import signals as gobject
     ...     import logging
     ...     logging.basicConfig(level=logging.DEBUG) # allows us to see the protocol debug
     ...
@@ -69,7 +69,7 @@ password was wrong, this will lead us to use the L{papyon.event} interfaces:
     >>> client.login(*account)
     >>>
     >>> if __name__ == "__main__":
-    ...     import gobject
+    ...     from papyon.util import signals as gobject
     ...     import logging
     ...
     ...     logging.basicConfig(level=logging.DEBUG) # allows us to see the protocol debug
@@ -78,7 +78,6 @@ password was wrong, this will lead us to use the L{papyon.event} interfaces:
     ...     mainloop.run()
 
 """
-
 
 import papyon.profile as profile
 import papyon.msnp as msnp

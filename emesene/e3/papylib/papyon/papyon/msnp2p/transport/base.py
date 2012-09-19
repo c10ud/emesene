@@ -22,7 +22,7 @@ from papyon.msnp2p.transport.TLP import MessageBlob
 
 from papyon.util.timer import Timer
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 import random
 import threading

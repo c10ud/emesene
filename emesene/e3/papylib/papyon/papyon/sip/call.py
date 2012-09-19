@@ -26,7 +26,7 @@ from papyon.sip.constants import *
 from papyon.sip.sdp import SDPMessage
 from papyon.util.timer import Timer
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 
 __all__ = ['SIPCall']

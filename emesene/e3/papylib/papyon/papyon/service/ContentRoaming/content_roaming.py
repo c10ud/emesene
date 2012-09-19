@@ -23,7 +23,7 @@ from papyon.service.ContentRoaming.constants import *
 from papyon.service.ContentRoaming.scenario import *
 from papyon.util.async import *
 
-import gobject
+from papyon.util import signals as gobject
 import imghdr
 import logging
 
@@ -191,7 +191,7 @@ if __name__ == '__main__':
     import sys
     import getpass
     import signal
-    import gobject
+    from papyon.util import signals as gobject
     import logging
     from papyon.service.SingleSignOn import *
     from papyon.service.AddressBook import *

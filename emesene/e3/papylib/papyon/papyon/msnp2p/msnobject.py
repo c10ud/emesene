@@ -27,7 +27,7 @@ from papyon.msnp2p.session import P2PSession
 from papyon.event import EventsDispatcher
 from papyon.util.decorator import rw_property
 
-import gobject
+from papyon.util import signals as gobject
 import random
 
 __all__ = ['MSNObjectSession']

@@ -33,7 +33,7 @@ from papyon.service.description.AB.constants import *
 from papyon.service.AddressBook.scenario.contacts import *
 from papyon.util.async import run
 
-import gobject
+from papyon.util import signals as gobject
 
 import logging
 logger = logging.getLogger('papyon.service.address_book')
@@ -868,7 +868,7 @@ if __name__ == '__main__':
     import sys
     import getpass
     import signal
-    import gobject
+    from papyon.util import signals as gobject
     import logging
     from papyon.service.SingleSignOn import *
     from papyon.service.description.AB.constants import ContactGeneral

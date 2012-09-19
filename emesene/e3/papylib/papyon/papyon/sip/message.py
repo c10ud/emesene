@@ -22,7 +22,7 @@ from papyon.errors import ParseError
 from papyon.sip.constants import *
 from papyon.util.decorator import rw_property
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 import re
 import weakref

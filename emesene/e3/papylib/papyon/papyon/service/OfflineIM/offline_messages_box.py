@@ -36,7 +36,7 @@ import papyon.util.guid as guid
 import papyon.util.iso8601 as iso8601
 
 import datetime
-import gobject
+from papyon.util import signals as gobject
 
 import logging
 
@@ -388,7 +388,7 @@ if __name__ == '__main__':
     import sys
     import getpass
     import signal
-    import gobject
+    from papyon.util import signals as gobject
     import logging
     from papyon.service.SingleSignOn import *
     from papyon.service.AddressBook import AddressBook

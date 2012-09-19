@@ -28,7 +28,8 @@ contacts in his/her contact list.
 
 from papyon.util.decorator import rw_property
 from papyon.service.description import AB
-import gobject
+from papyon.util import signals as gobject
+
 import logging
 
 __all__ = ['Profile', 'Contact', 'Group', 'EndPoint',

@@ -24,7 +24,7 @@ from papyon.msnp2p.transport.notification import *
 from papyon.msnp2p.transport.direct import *
 from papyon.msnp2p.transport.TLP import MessageBlob
 
-import gobject
+from papyon.util import signals as gobject
 import struct
 import logging
 import os

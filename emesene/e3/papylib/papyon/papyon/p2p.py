@@ -37,8 +37,8 @@ from papyon.util.async import *
 from papyon.util.encoding import b64_decode
 import papyon.util.element_tree as ElementTree
 import papyon.util.string_io as StringIO
+from papyon.util import signals as gobject
 
-import gobject
 import xml.sax.saxutils as xml
 import urllib
 import base64

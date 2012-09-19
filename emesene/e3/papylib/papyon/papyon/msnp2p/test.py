@@ -9,7 +9,7 @@ from papyon.msnp2p.constants import EufGuid
 import papyon.util.string_io as StringIO
 
 import logging
-import gobject
+from papyon.util import signals as gobject
 import os
 
 logging.basicConfig(level=logging.DEBUG)

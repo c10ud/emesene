@@ -23,7 +23,7 @@
 
 from constants import ProtocolState, ProtocolError
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 
 __all__ = ['BaseProtocol']

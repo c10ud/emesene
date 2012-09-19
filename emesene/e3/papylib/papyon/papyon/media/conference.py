@@ -25,7 +25,7 @@ import pygst
 pygst.require('0.10')
 
 import farsight
-import gobject
+from papyon.util import signals as gobject
 import gst
 import logging
 import sys

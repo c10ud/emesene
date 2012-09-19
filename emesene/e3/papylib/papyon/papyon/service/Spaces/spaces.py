@@ -24,7 +24,7 @@ from papyon.service.SOAPUtils import *
 
 import papyon.util.element_tree as ElementTree
 import papyon.util.string_io as StringIO
-import gobject
+from papyon.util import signals as gobject
 
 import logging
 
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     import sys
     import getpass
     import signal
-    import gobject
+    from papyon.util import signals as gobject
     import logging
     from papyon.service.SingleSignOn import *
     from papyon.service.AddressBook import *

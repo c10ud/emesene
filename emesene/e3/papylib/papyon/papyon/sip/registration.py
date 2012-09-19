@@ -20,7 +20,7 @@
 
 from papyon.util import Timer
 
-import gobject
+from papyon.util import signals as gobject
 import logger
 
 __all__ = ['SIPRegistration']

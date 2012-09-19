@@ -22,7 +22,7 @@ from papyon.event import EventsDispatcher
 from papyon.media.constants import *
 from papyon.util.timer import Timer
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 import weakref
 

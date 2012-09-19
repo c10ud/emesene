@@ -26,7 +26,7 @@ from papyon.util.parsing import parse_account
 
 import papyon.profile
 
-import gobject
+from papyon.util import signals as gobject
 import weakref
 import logging
 

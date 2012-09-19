@@ -22,7 +22,7 @@ from papyon.msnp.constants import *
 from papyon.sip.call import SIPCall
 from papyon.sip.core import SIPCore
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 import uuid
 

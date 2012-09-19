@@ -42,6 +42,11 @@ papypath = os.path.abspath("e3" + os.sep + "papylib" + os.sep + "papyon")
 if os.path.exists(papypath):
     sys.path.insert(0, papypath)
 
+import papyon
+import papyon.event
+import papyon.service.ContentRoaming as CR
+import papyon.util.string_io as StringIO
+'''
 try:
     REQ_VER = (0, 5, 4)
 
@@ -61,7 +66,7 @@ except ImportError, ie:
 except Exception, e:
     log.exception("python-papyon(>=%s.%s.%s) required "
         "in order to use this extension" % REQ_VER)
-
+'''
 from PapyEvents import *
 from PapyConvert import *
 

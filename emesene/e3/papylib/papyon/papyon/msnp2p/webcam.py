@@ -27,7 +27,7 @@ from papyon.util.decorator import rw_property
 import papyon.util.element_tree as ElementTree
 import struct
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 import base64
 import os
