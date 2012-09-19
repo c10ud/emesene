@@ -27,7 +27,7 @@ from papyon.gnet.proxy.factory import ProxyFactory
 
 from urlparse import urlsplit
 
-import gobject
+from papyon.util import signals as gobject
 import base64
 import logging
 import platform

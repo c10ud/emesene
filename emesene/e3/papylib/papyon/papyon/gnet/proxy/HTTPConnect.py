@@ -23,7 +23,7 @@ from papyon.gnet.constants import *
 from papyon.gnet.errors import *
 from papyon.gnet.parser import HTTPParser
 
-import gobject
+from papyon.util import signals as gobject
 import base64
 import logging
 

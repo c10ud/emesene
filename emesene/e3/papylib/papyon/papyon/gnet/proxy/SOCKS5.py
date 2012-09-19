@@ -23,7 +23,7 @@ from papyon.gnet.constants import *
 from papyon.gnet.errors import *
 from papyon.gnet.parser import DelimiterParser
 
-import gobject
+from papyon.util import signals as gobject
 import logging
 import socket
 import struct

@@ -20,7 +20,7 @@
 from papyon.gnet.io import AbstractClient
 from papyon.gnet.constants import IoStatus
 
-import gobject
+from papyon.util import signals as gobject
 
 __all__ = ['AbstractProxy']
 

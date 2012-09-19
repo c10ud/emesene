@@ -22,7 +22,7 @@ from papyon.gnet.constants import *
 from papyon.gnet.proxy.proxyfiable import ProxyfiableClient
 from sock import SocketClient
 
-import gobject
+from papyon.util import signals as gobject
 
 __all__ = ['TCPClient']
 

@@ -22,7 +22,7 @@ from papyon.gnet.constants import *
 from papyon.gnet.proxy.proxyfiable import ProxyfiableClient
 from ssl_socket import SSLSocketClient
 
-import gobject
+from papyon.util import signals as gobject
 
 __all__ = ['SSLTCPClient']
 

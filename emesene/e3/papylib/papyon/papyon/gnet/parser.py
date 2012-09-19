@@ -23,7 +23,7 @@
 from constants import *
 from message.HTTP import HTTPResponse
 
-import gobject
+from papyon.util import signals as gobject
 
 __all__ = ['AbstractParser', 'DelimiterParser']
 

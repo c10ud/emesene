@@ -20,7 +20,7 @@
 #
 from papyon.gnet.constants import *
 
-import gobject
+from papyon.util import signals as gobject
 
 __all__ = ['AbstractClient']
 
